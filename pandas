@@ -1,0 +1,541 @@
+##################################### pandas ##############################################
+
+###### Series ##################
+
+obj = pd.Series([3,1,-2,9])
+obj
+#0    3
+#1    1
+#2   -2
+#3    9
+#dtype: int64
+
+obj.values
+#array([ 3,  1, -2,  9], dtype=int64)
+
+obj.index
+#RangeIndex(start=0, stop=4, step=1)
+
+obj.dtype
+#dtype('int64')
+
+# can change index
+obj2 = pd.Series([3,1,-2,9], index=['a','b','c','d'])
+obj2
+#a    3
+#b    1
+#c   -2
+#d    9
+#dtype: int64
+
+data = {'David': 28000, 'Kim':33000, 'Tom': 19000, 'Jack':23000}
+obj3 = pd.Series(data)
+obj3
+#David    28000
+#Kim      33000
+#Tom      19000
+#Jack     23000
+#dtype: int64
+
+obj3.name = 'Salary'
+obj3.index.name = 'Names'
+obj3
+#Names
+#David    28000
+#Kim      33000
+#Tom      19000
+#Jack     23000
+#Name: Salary, dtype: int64
+
+obj3.index = ['a','b','c','d']
+obj3
+#a    28000
+#b    33000
+#c    19000
+#d    23000
+#Name: Salary, dtype: int64
+
+############################### Data Frame ######################
+
+data = {'name': ['Brian','Christian','Daniel','Daniel','Daniel'],
+       'year': [2017,2016,2016,2017,2018],
+       'point': [2.7,3.1,2.1,2.7,3.3]}
+df = pd.DataFrame(data)
+df
+#   name	    year	point
+#0	Brian 	  2017	2.7
+#1	Christian	2016	3.1
+#2	Daniel	  2016	2.1
+#3	Daniel	  2017	2.7
+#4	Daniel	  2018	3.3
+
+### rows
+df.index
+#RangeIndex(start=0, stop=5, step=1)
+
+### columns
+df.columns
+#Index(['name', 'year', 'point'], dtype='object')
+
+df.values
+#array([['Brian', 2017, 2.7],
+#       ['Christian', 2016, 3.1],
+#       ['Daniel', 2016, 2.1],
+#       ['Daniel', 2017, 2.7],
+#       ['Daniel', 2018, 3.3]], dtype=object)
+
+df.index.name = 'Num'
+df.columns.name = 'Info'
+df
+#Info	  name	    year	point
+#Num			
+#0	    Brian	    2017	2.7
+#1	    Christian	2016	3.1
+#2	    Daniel	  2016	2.1
+#3	    Daniel	  2017	2.7
+#4	    Daniel	  2018	3.3
+
+df2 = pd.DataFrame(data, columns=['year','name','point','penalty'], 
+                   index = ['one','two','three','four','five'])
+df2
+#       year	name	    point	penalty
+#one	  2017	Brian	    2.7	  NaN
+#two	  2016	Christian	3.1	  NaN
+#three	2016	Daniel	  2.1	  NaN
+#four	  2017	Daniel	  2.7	  NaN
+#five	  2018	Daniel	  3.3	  NaN
+
+df2.describe()
+#       year	      point
+#count	5.00000	    5.000000
+#mean	  2016.80000	2.780000
+#std	  0.83666	    0.460435
+#min	  2016.00000	2.100000
+#25%	  2016.00000	2.700000
+#50%	  2017.00000	2.700000
+#75%	  2017.00000	3.100000
+#max	  2018.00000	3.300000
+
+
+############ DataFrame Indexing #############################
+
+df2
+#       year	name	    point	penalty
+# one	  2017	Brian	    2.7	  NaN
+# two	  2016	Christian	3.1	  NaN
+# three	2016	Daniel	  2.1	  NaN
+# four	2017	Daniel	  2.7	  NaN
+# five	2018	Daniel	  3.3	  NaN
+
+df2['year']
+#one      2017
+#two      2016
+#three    2016
+#four     2017
+#five     2018
+#Name: year, dtype: int64
+
+df2.year
+#one      2017
+#two      2016
+#three    2016
+#four     2017
+#five     2018
+#Name: year, dtype: int64
+
+df2[['year','point']]
+#       year	point
+#one	  2017	2.7
+#two	  2016	3.1
+#three	2016	2.1
+#four	  2017	2.7
+#five	  2018	3.3
+
+df2['penalty'] = 0.5
+df2
+#       year	name	    point	penalty
+#one	  2017	Brian	    2.7	  0.5
+#two	  2016	Christian	3.1	  0.5
+#three	2016	Daniel	  2.1	  0.5
+#four	  2017	Daniel	  2.7	  0.5
+#five	  2018	Daniel	  3.3	  0.5
+
+df2['penalty'] = [0.2,0.3,0.2,0.5,0.3]
+df2
+#        year	name	    point	penalty
+#one 	   2017	Brian	    2.7	  0.2
+#two	   2016	Christian	3.1	  0.3
+#three	 2016	Daniel	  2.1	  0.2
+#four	   2017	Daniel	  2.7	  0.5
+#five	   2018	Daniel	  3.3	  0.3
+
+df2['number'] = np.arange(1,6)
+df2
+#       year	name	    point	penalty	number
+#one	  2017	Brian	    2.7	  0.2	    1
+#two	  2016	Christian	3.1 	0.3	    2
+#three	2016	Daniel	  2.1	  0.2	    3
+#four	  2017	Daniel	  2.7 	0.5	    4
+#five 	2018	Daniel	  3.3	  0.3	    5
+
+val = pd.Series([-0.3,-0.5,-0.1], index=['two','three','five'])
+df2['debt'] = val
+df2
+#       year	  name	  point	    penalty	number	debt
+#one	  2017	Brian	    2.7	      0.2	    1	      NaN
+#two	  2016	Christian	3.1	      0.3	    2	      -0.3
+#three	2016	Daniel	  2.1	      0.2	    3	      -0.5
+#four	  2017	Daniel	  2.7	      0.5	    4	      NaN
+#five	  2018	Daniel	  3.3	      0.3	    5	      -0.1
+
+df = df2
+df
+#       year	name	    point	  penalty	number	debt
+#one	  2017	Brian	    2.7	    0.2	    1	      NaN
+#two	  2016	Christian	3.1	    0.3	    2	      -0.3
+#three	2016	Daniel	   2.1	  0.2	    3	      -0.5
+#four	  2017	Daniel	  2.7	    0.5	    4	      NaN
+#five	  2018	Daniel	  3.3	    0.3	    5	      -0.1
+
+df['net_point'] = df['point'] - df['penalty']
+df
+#       year	name	      point	penalty	number	debt	net_point
+#one	  2017	Brian	      2.7	  0.2	    1	      NaN	    2.5
+#two	  2016	Christian	  3.1	  0.3	    2	      -0.3	  2.8
+#three	2016	Daniel	    2.1	  0.2	    3	      -0.5	  1.9
+#four	  2017	Daniel	    2.7	  0.5	    4	      NaN	    2.2
+#five	  2018	Daniel	    3.3	  0.3	    5	      -0.1	  3.0
+
+df['high_point'] = df['net_point'] > 2.5
+df
+#       year	name	    point	penalty	number	debt	net_point	high_point
+#one	  2017	Brian	    2.7	    0.2	    1	    NaN	    2.5	    False
+#two	  2016	Christian	3.1	    0.3	    2	    -0.3	  2.8	    True
+#three	2016	Daniel	  2.1	    0.2	    3	    -0.5	  1.9	    False
+#four	  2017	Daniel	  2.7	    0.5	    4	    NaN	    2.2	    False
+#five	  2018	Daniel	  3.3	    0.3	    5	    -0.1	  3.0	    True
+
+del df['high_point']
+del df['net_point']
+del df['number']
+df
+#       year	name	    point	penalty	debt
+#one	  2017	Brian	    2.7	    0.2	  NaN
+#two	  2016	Christian	3.1	    0.3	  -0.3
+#three	2016	Daniel	  2.1	    0.2	  -0.5
+#four	  2017	Daniel	  2.7	    0.5	  NaN
+#five	  2018	Daniel	  3.3	    0.3	  -0.1
+
+df.columns
+Index(['year', 'name', 'point', 'penalty', 'debt'], dtype='object')
+
+df.index.name = 'Order'
+df.columns.name = 'Info'
+df
+#Info	  year	name	    point	penalty	debt
+#Order					
+#one	  2017	Brian	    2.7	  0.2	    NaN
+#two	  2016	Christian	3.1 	0.3	    -0.3
+#three	2016	Daniel	  2.1	  0.2	    -0.5
+#four	  2017	Daniel	  2.7 	0.5	    NaN
+#five	  2018	Daniel	  3.3	  0.3	    -0.1
+
+df[0:3]
+Info	  year	name	    point	penalty	debt
+#Order					
+#one	  2017	Brian	    2.7	   0.2	  NaN
+#two	  2016	Christian	3.1	  0.3	    -0.3
+#three	2016	Daniel	  2.1	  0.2	    -0.5
+
+df.loc['two']
+#Info
+#year            2016
+#name       Christian
+#point            3.1
+#penalty          0.3
+#debt            -0.3
+#Name: two, dtype: object
+
+df.loc['two':'four']
+#Info	  year	name	    point	penalty	debt
+#Order					
+#two	  2016	Christian	3.1	    0.3	  -0.3
+#three	2016	Daniel	  2.1	    0.2	  -0.5
+#four	  2017	Daniel	  2.7	    0.5 	NaN
+
+df.loc['two':'four', 'point']
+#Order
+#two      3.1
+#three    2.1
+#four     2.7
+#Name: point, dtype: float64
+
+df.loc[:,'year']
+#Order
+#one      2017
+#two      2016
+#three    2016
+#four     2017
+#five     2018
+#Name: year, dtype: int64
+
+df['year']
+#Order
+#one      2017
+#two      2016
+#three    2016
+#four     2017
+#five     2018
+#Name: year, dtype: int64
+
+df.loc[:,['year','name']]
+#Info	  year	name
+#Order		
+#one	  2017	Brian
+#two	  2016	Christian
+#three	2016	Daniel
+#four	  2017	Daniel
+#five	  2018	Daniel
+df.loc['three':'five','year':'point']
+#Info	  year	name	point
+#Order			
+#three	2016	Daniel	2.1
+#four	  2017	Daniel	2.7
+#five	  2018	Daniel	3.3
+
+df.loc['six'] = [2015, 'Shawn', 3.0, 0.2, 0.7]
+df
+#Info	year	name	point	penalty	debt
+#Order					
+#one	2017	Brian	2.7	0.2	NaN
+#two	2016	Christian	3.1	0.3	-0.3
+#three	2016	Daniel	2.1	0.2	-0.5
+#four	2017	Daniel	2.7	0.5	NaN
+#five	2018	Daniel	3.3	0.3	-0.1
+#six	2015	Shawn	3.0	0.2	0.7
+ 
+### df.iloc[index]
+df.iloc[3] ### 4th row
+#Info
+#year         2017
+#name       Daniel
+#point         2.7
+#penalty       0.5
+#debt          NaN
+#Name: four, dtype: object
+df.iloc[3:5,0:2]
+#Info	year	name
+#Order		
+#four	2017	Daniel
+#five	2018	Daniel
+
+df.iloc[[0,2,3],[0,1,4]]
+#Info	year	name	debt
+#Order			
+#one	2017	Brian	NaN
+#three	2016	Daniel	-0.5
+#four	2017	Daniel	NaN
+df.iloc[:,1:4]
+#Info	name	point	penalty
+#Order			
+#one	Brian	2.7	0.2
+#two	Christian	3.1	0.3
+#three	Daniel	2.1	0.2
+#four	Daniel	2.7	0.5
+#five	Daniel	3.3	0.3
+#six	Shawn	3.0	0.2
+
+df.iloc[1,1]
+#'Christian'
+
+##################### boolean indexing from DataFrame
+
+df
+#Info	  year	 name	    point	penalty	debt
+#Order					
+#one	  2017	Brian	    2.7	  0.2	    NaN
+#two	  2016	Christian	3.1	  0.3	    -0.3
+#three	2016	Daniel	  2.1	  0.2	    -0.5
+#four	  2017	Daniel	  2.7	  0.5	    NaN
+#five	  2018	Daniel	  3.3	  0.3	    -0.1
+#six	  2015	Shawn	    3.0	  0.2	    0.7
+
+df['year'] > 2016
+#Order
+#one       True
+#two      False
+#three    False
+#four      True
+#five      True
+#six      False
+#Name: year, dtype: bool
+
+df.loc[df['year']>2016, :]
+#Info	year	name	  point	penalty	debt
+#Order					
+#one	2017	Brian	  2.7	  0.2	    NaN
+#four	2017	Daniel	2.7	  0.5	    NaN
+#five	2018	Daniel	3.3	  0.3	    -0.1
+
+df.loc[df['name']=='Daniel',['name','point']]
+#Info	  name	point
+#Order		
+#three	Daniel	2.1
+#four	  Daniel	2.7
+#five	  Daniel	3.3
+
+df.loc[(df['point'] > 2.3) & (df['point'] < 3.0)]
+#Info	year	name	  point	penalty	debt
+#Order					
+#one	2017	Brian	  2.7	  0.2	    NaN
+#four	2017	Daniel	2.7	  0.5	    NaN
+
+df.loc[df['point'] >= 3.0, 'penalty'] = 0
+df
+#Info	  year	name	    point	penalty	debt
+#Order					
+#one	  2017	Brian	    2.7	  0.2	    NaN
+#two	  2016	Christian	3.1	  0.0	    -0.3
+#three	2016	Daniel	  2.1	  0.2	    -0.5
+#four	  2017	Daniel	  2.7	  0.5	    NaN
+#five	  2018	Daniel	  3.3	  0.0	    -0.1
+#six	  2015	Shawn	    3.0	  0.0	    0.7
+
+############################## Data ####################################################
+
+df = pd.DataFrame(np.random.randn(6,4))
+df
+#   0	          1	          2	          3 
+#0	0.593298	  -1.412290	  -0.008338	  -0.069484
+#1	-0.157972	  -0.690623	  1.511215	  1.441260
+#2	0.515979	  -2.261321	  -2.273262	  1.047784
+#3	-0.875186	  0.168660	  -0.541034	  0.078198
+#4	0.433342	  -1.766760	  0.679862	  -0.006061
+#5	-0.757228	  -1.345091	  -1.260911	  -0.097794
+
+df.columns = ['A','B','C','D']
+df.index = pd.date_range('20190501', periods = 6)
+df.index
+#DatetimeIndex(['2019-05-01', '2019-05-02', '2019-05-03', '2019-05-04',
+#               '2019-05-05', '2019-05-06'],
+#              dtype='datetime64[ns]', freq='D')
+
+df
+#             A	        B	        C	        D
+#2019-05-01	  0.593298	-1.412290	-0.008338	-0.069484
+#2019-05-02	  -0.157972	-0.690623	1.511215	1.441260
+#2019-05-03	  0.515979	-2.261321	-2.273262	1.047784
+#2019-05-04	  -0.875186	0.168660	-0.541034	0.078198
+#2019-05-05	  0.433342	-1.766760	0.679862	-0.006061
+#2019-05-06	  -0.757228	-1.345091	-1.260911	-0.097794
+ ### np.nan = NaN
+
+df['F'] = [2.3, np.nan, 1.1, 5.7, np.nan, 3.6] # np.nan = NaN
+df
+#             A	          B	          C	          D	          F
+#2019-05-01	  0.593298	  -1.412290	  -0.008338	  -0.069484	  2.3
+#2019-05-02	  -0.157972	  -0.690623	  1.511215	  1.441260	  NaN
+#2019-05-03	  0.515979	  -2.261321	  -2.273262	  1.047784	  1.1
+#2019-05-04	  -0.875186	  0.168660	  -0.541034	  0.078198	  5.7
+#2019-05-05	  0.433342	  -1.766760	  0.679862	  -0.006061	  NaN
+#2019-05-06	  -0.757228	  -1.345091	  -1.260911	  -0.097794	  3.6
+
+df.dropna(how = 'any') # remove row if any value of the row is nan
+#             A	      B	        C	        D	          F
+#2019-05-01	0.593298	-1.412290	-0.008338	-0.069484	2.3
+#2019-05-03	0.515979	-2.261321	-2.273262	1.047784	1.1
+#2019-05-04	-0.875186	0.168660	-0.541034	0.078198	5.7
+#2019-05-06	-0.757228	-1.345091	-1.260911	-0.097794	3.6
+
+df.dropna(how='all') # remove row if all values of the row are nan
+#           A	          B	        C	        D	        F
+#2019-05-01	0.593298	-1.412290	-0.008338	-0.069484	2.3
+#2019-05-02	-0.157972	-0.690623	1.511215	1.441260	NaN
+#2019-05-03	0.515979	-2.261321	-2.273262	1.047784	1.1
+#2019-05-04	-0.875186	0.168660	-0.541034	0.078198	5.7
+#2019-05-05	0.433342	-1.766760	0.679862	-0.006061	NaN
+#2019-05-06	-0.757228	-1.345091	-1.260911	-0.097794	3.6
+
+df.fillna(value = 0.7)
+#           A	          B	          C     	D	        F
+#2019-05-01	0.593298	-1.412290	-0.008338	-0.069484	2.3
+#2019-05-02	-0.157972	-0.690623	1.511215	1.441260	0.7
+#2019-05-03	0.515979	-2.261321	-2.273262	1.047784	1.1
+#2019-05-04	-0.875186	0.168660	-0.541034	0.078198	5.7
+#2019-05-05	0.433342	-1.766760	0.679862	-0.006061	0.7
+#2019-05-06	-0.757228	-1.345091	-1.260911	-0.097794	3.6
+df.isnull()
+#           A	    B	    C   	D	    F
+#2019-05-01	False	False	False	False	False
+#2019-05-02	False	False	False	False	True
+#2019-05-03	False	False	False	False	False
+#2019-05-04	False	False	False	False	False
+#2019-05-05	False	False	False	False	True
+#2019-05-06	False	False	False	False	False
+
+df
+#             A	        B	      C       	D	        F
+#2019-05-01	0.593298	-1.412290	-0.008338	-0.069484	2.3
+#2019-05-02	-0.157972	-0.690623	1.511215	1.441260	NaN
+#2019-05-03	0.515979	-2.261321	-2.273262	1.047784	1.1
+#2019-05-04	-0.875186	0.168660	-0.541034	0.078198	5.7
+#2019-05-05	0.433342	-1.766760	0.679862	-0.006061	NaN
+#2019-05-06	-0.757228	-1.345091	-1.260911	-0.097794	3.6
+df.loc[df.isnull()['F'],:]
+#           A	          B	        C	      D	        F
+#2019-05-02	-0.157972	-0.690623	1.511215	1.441260	NaN
+#2019-05-05	0.433342	-1.766760	0.679862	-0.006061	NaN
+
+pd.to_datetime('20190501')
+#Timestamp('2019-05-01 00:00:00')
+
+df.drop(pd.to_datetime('20190501'))
+#             A	        B	        C	        D	      F
+#2019-05-02	-0.157972	-0.690623	1.511215	1.441260	NaN
+#2019-05-03	0.515979	-2.261321	-2.273262	1.047784	1.1
+#2019-05-04	-0.875186	0.168660	-0.541034	0.078198	5.7
+#2019-05-05	0.433342	-1.766760	0.679862	-0.006061	NaN
+#2019-05-06	-0.757228	-1.345091	-1.260911	-0.097794	3.6
+
+df.drop([pd.to_datetime('20190502'),pd.to_datetime('20190504')])
+#           A	          B	        C	      D	        F
+#2019-05-01	0.593298	-1.412290	-0.008338	-0.069484	2.3
+#2019-05-03	0.515979	-2.261321	-2.273262	1.047784	1.1
+#2019-05-05	0.433342	-1.766760	0.679862	-0.006061	NaN
+#2019-05-06	-0.757228	-1.345091	-1.260911	-0.097794	3.6
+
+df.drop('F', axis = 1) # axis =0 for rows. axis = 1 for columns
+#A	B	C	D
+#2019-05-01	0.593298	-1.412290	-0.008338	-0.069484
+#2019-05-02	-0.157972	-0.690623	1.511215	1.441260
+#2019-05-03	0.515979	-2.261321	-2.273262	1.047784
+#2019-05-04	-0.875186	0.168660	-0.541034	0.078198
+#2019-05-05	0.433342	-1.766760	0.679862	-0.006061
+#2019-05-06	-0.757228	-1.345091	-1.260911	-0.097794
+
+df.drop(['B','C'], axis = 1)
+#             A	        D	        F
+#2019-05-01	0.593298	-0.069484	2.3
+#2019-05-02	-0.157972	1.441260	NaN
+#2019-05-03	0.515979	1.047784	1.1
+#2019-05-04	-0.875186	0.078198	5.7
+#2019-05-05	0.433342	-0.006061	NaN
+#2019-05-06	-0.757228	-0.097794	3.6
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
