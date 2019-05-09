@@ -20,7 +20,6 @@ for i in range(100):
     b = random.randint(1,50)
     G.add_edge(a,b)
 
-# 네트워크를 공간상에 배치하고 그립니다.
 positions = nx.spring_layout(G)
 nx.draw_networkx_edges(G, positions, alpha=0.2);
 nx.draw_networkx_nodes(G, positions, node_size=50);
