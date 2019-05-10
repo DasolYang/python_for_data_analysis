@@ -1,0 +1,68 @@
+a_list = [['David', 'M', 22, True], 
+          ['Kim', 'F', 20, False],
+          ['Jane', 'F', 23, True],
+          ['Aaron', 'M', 17, True], 
+          ['Timothy', 'M', 21, True], 
+          ['Mary', 'F', 19, True], 
+          ['Kim', 'F', 25, False]]
+
+for row in a_list:
+    if row[2] >= 21 and row[1] == 'F' and row[3] == True:
+        print(row)
+        
+# ['Jane', 'F', 23, True]
+
+ages = [] # ages = list() but slower
+names = []
+
+for row in a_list:
+    (name, sex, age, experience) = row
+    print(name, age)
+    ages.append(age)
+    names.append(name)
+    
+#David 22
+#Kim 20
+#Jane 23
+#Aaron 17
+#Timothy 21
+#Mary 19
+#Kim 25
+
+print(ages)
+print(names)
+# [22, 20, 23, 17, 21, 19, 25]
+# ['David', 'Kim', 'Jane', 'Aaron', 'Timothy', 'Mary', 'Kim']
+
+for index, age in enumerate(ages):
+  print(index, age, names[index])
+#0 22 David
+#1 20 Kim
+#2 23 Jane
+#3 17 Aaron
+#4 21 Timothy
+#5 19 Mary
+#6 25 Kim
+
+age_name = zip(ages,names)
+print(list(age_name))
+
+# [(22, 'David'), (20, 'Kim'), (23, 'Jane'), (17, 'Aaron'), (21, 'Timothy'), (19, 'Mary'), (25, 'Kim')]
+
+
+numbers = [10, 22, 5, 95, 32, 43, 82]
+
+gt_19_numbers = [v for v in numbers if v > 19]
+print(gt_19_numbers)
+#[22, 95, 32, 43, 82]
+
+# same as 
+for v in numbers:
+    if v > 19:
+        gt_19_numbers.append(v)
+print(gt_19_numbers)
+
+double_numbers = [v * 2 for v in numbers]
+print(double_numbers)
+#[20, 44, 10, 190, 64, 86, 164]
+
