@@ -1,0 +1,61 @@
+a_dict = {}  # same as a_dict = dict()
+
+a_dict['a'] = 7
+a_dict['53'] = 'Kay'
+
+#a_dict['b'] # KeyError
+print(a_dict.get('b')) # return None
+print(a_dict.get('b', 'not in there')) # return not in there
+
+b_dict = {'a': 7, '53': 'Kay'}
+c_dict = {'w': 6, '22': 'Tim'}
+
+print(a_dict == b_dict) # True
+b_dict.update(c_dict) 
+print(b_dict) # {'a': 7, '53': 'Kay', 'w': 6, '22': 'Tim'}
+
+print(a_dict == b_dict) # False
+
+
+info = {'Hannah': 35, 'Peter': 23, 'George': 19}
+
+print('Peter' in info) # True
+info.setdefault('Jeremy', 25)
+info.setdefault('Nancy', 27)
+
+print(info['Jeremy'] == 25) # True
+print(info)
+# {'Hannah': 35, 'Peter': 23, 'George': 19, 'Jeremy': 25, 'Nancy': 27}
+
+info.pop('Peter') # return the value
+# del info['Peter'] does not return the value
+
+info = {'Hannah': 35, 'Peter': 23, 'George': 19}
+
+print(info.keys())
+# dict_keys(['Hannah', 'Peter', 'George'])
+print(info.values())
+# dict_values([35, 23, 19])
+print(info.items())
+# dict_items([('Hannah', 35), ('Peter', 23), ('George', 19)])
+
+for k in info.keys():
+    print(k)
+    
+#Hannah
+#Peter
+#George
+
+for item in info.items():
+    print(item)
+
+#('Hannah', 35)
+#('Peter', 23)
+#('George', 19)
+
+for k, v in info.items():
+    print('key = {}, value = {}'.format(k,v))
+
+# key = Hannah, value = 35
+# key = Peter, value = 23
+# key = George, value = 19
