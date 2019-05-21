@@ -1,0 +1,28 @@
+import pandas as pd
+df = pd.read_excel('https://github.com/toracle/python-basic-lecture/raw/master/assets/%EC%97%91%EC%85%80%EA%B3%BC%EC%A0%95%EC%8B%A4%EC%8A%B5%EC%83%9D.xlsx', sheet_name = 'Sheet1')
+df
+
+df.sort_values('신장(cm)', ascending = False)
+
+df.sort_values(['신장(cm)','몸무게(kg)'], ascending = False)
+
+df.sort_values(['신장(cm)','몸무게(kg)'],ascending=[False, True])
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
