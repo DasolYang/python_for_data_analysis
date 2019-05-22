@@ -276,18 +276,11 @@ def check_BMI(bmi):
 
 df_dtype['Check BMI'] = df_dtype['BMI'].apply(check_BMI)
 
+pd.crosstab(df_dtype['Check BMI'], df_dtype['Favorite Food'])
 
-
-
-
-
-
-
-
-
-
-
-
-
+#Favorite Food	1	2	3
+#Check BMI			
+#Healthy weight	5	8	5
+#Overweight	0	0	2
 
 
