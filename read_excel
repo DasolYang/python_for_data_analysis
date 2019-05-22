@@ -137,6 +137,152 @@ df_merged
 #19	20	    28	2	  159	    60	        2	          American
 
 
+df.corr()
+
+#               Number	  Age	      Sex	        Height	Weight	  Favorite Food
+#Number	        1.000000	0.228479	0.208141	-0.313440	-0.495021	0.079022
+#Age	          0.228479	1.000000	0.334697	-0.147492	-0.239750	-0.104107
+#Sex	          0.208141	0.334697	1.000000	-0.765901	-0.751269	-0.227276
+#Height	        -0.313440	-0.147492	-0.765901	1.000000	0.882939	0.038434
+#Weight	        -0.495021	-0.239750	-0.751269	0.882939	1.000000	0.068082
+#Favorite Food	0.079022	-0.104107	-0.227276	0.038434	0.068082	1.000000
+
+
+# 'fav_food_info.xlsx' should be in same jupyter notebook
+df_dtype = pd.read_excel('fav_food_info.xlsx', sheet_name='Sheet1',
+                         index_col=0,
+                         dtype={'Number': 'object', 'Sex': 'object', 'Favorite Food': 'object'})
+                         # make Number, Sex, Favorite Food as string
+df_dtype
+
+df_dtype.corr()
+#	      Age	        Height	    Weight
+#Age	  1.000000	  -0.147492	  -0.239750
+#Height	-0.147492	  1.000000	  0.882939
+#Weight	-0.239750	  0.882939	  1.000000
+
+pd.pivot_table(df_dtype, index='Sex')
+#	    Age	    Height	    Weight
+#Sex			
+#1	27.714286	174.071429	72.285714
+#2	30.500000	161.333333	61.000000
+
+pd.pivot_table(df_dtype, index=['Sex', 'Favorite Food'])
+		              Age	        Height	    Weight
+Sex	Favorite Food			
+1	        1	      27.666667	  177.000000	76.666667
+          2	      27.000000	  173.800000	71.000000
+          3	      28.333333	  172.833333	71.166667
+2	        1	      32.000000	  160.500000	57.000000
+          2	      30.333333	  162.333333	63.333333
+          3	      28.000000	  160.000000	62.000000
+
+df_dtype['Weight'] < 80
+#Number
+#1     False
+#2      True
+#3      True
+#4      True
+#5      True
+#6      True
+#7      True
+#8      True
+#9      True
+#10     True
+#11     True
+#12     True
+#13     True
+#14     True
+#15     True
+#16     True
+#17     True
+#18     True
+#19     True
+#20     True
+#Name: Weight, dtype: bool
+
+df_dtype[df_dtype['Weight'] <= 80]
+
+df_dtype['Height(m)'] = df_dtype['Height'] / 100
+df_dtype['BMI'] = round(df_dtype['Weight'] / pow(df_dtype['Height(m)'], 2),1)
+df_dtype
+#	      Age	Sex	Height	Weight	Favorite Food	Weight(m)	Height(m)	BMI
+#Number								
+#1	    30	1	  183	    82	      1	          0.82	    1.83	  24.5
+#2	    28	2	  160	    62	      3	          0.62	    1.60	  24.2
+#3	    27	1	  178	    77	      2	          0.77	    1.78	  24.3
+#4	    23	1	  172	    70	      2	          0.70	    1.72	  23.7
+#5	    25	1	  168	    72	      3	          0.72	    1.68	  25.5
+#6	    27	1	  179	    77	      1	          0.77	    1.79	  24.0
+#7	    26	1	  169	    71	      1	          0.71	    1.69	  24.9
+#8	    29	1	  171	    75	      3	          0.75	    1.71	  25.6
+#9	    34	2	  158	    60	      2	          0.60	    1.58	  24.0
+#10	    31	1	  183	    77	      3	          0.77	    1.83	  23.0
+#11	    26	2	  162	    59	      1	          0.59	    1.62	  22.5
+#12	    26	1	  173	    70	      2	          0.70	    1.73	  23.4
+#13	    35	1	  173	    68	      3	          0.68	    1.73	  22.7
+#14	    24	1	  176	    66	      3	          0.66	    1.76	  21.3
+#15	    29	2	  170	    70	      2	          0.70	    1.70	  24.2
+#16	    33	1	  177	    72	      2	          0.72	    1.77	  23.0
+#17	    38	2	  159	    55	      1	          0.55	    1.59	  21.8
+#18	    26	1	  166	    69	      3	          0.69	    1.66	  25.0
+#19	    26	1	  169	    66	      2	          0.66	    1.69	  23.1
+#20	    28	2	  159	    60	      2	          0.60	    1.59	  23.7
+
+def categorize_age(age):
+    return '{}~{}'.format(age // 5 * 5, (age // 5+1) *5-1)
+print(categorize_age(23))
+print(categorize_age(29))
+print(categorize_age(31))
+print(categorize_age(35))
+
+#20~24
+#25~29
+#30~34
+#35~39
+
+df_dtype['Age Group'] = df_dtype['Age'].apply(categorize_age)
+df_cat_pv = pd.pivot_table(df_dtype, index='Age Group', columns = 'Favorite Food', values = 'Weight')
+df_cat_pv.apply(lambda x: round(x, 1))
+
+
+#Favorite Food	  1	    2 	  3
+#Age Group			
+#20~24	        NaN	  70.0	66.0
+#25~29	        69.0	68.6	69.5
+#30~34	        82.0	66.0	77.0
+#35~39	        55.0	NaN	  68.0
+
+df_dtype.to_excel('fav_food_info_new.xlsx') # make new file
+
+
+
+def check_BMI(bmi):
+    if bmi > 35:
+        category = 'Severely obese'
+    if 35 >= bmi > 30:
+        category = 'Moderately obese'
+    if 30 >= bmi > 25:
+        category = 'Overweight'
+    if 25 >= bmi > 18.5:
+        category = 'Healthy weight'
+    if 18.5 >= bmi > 16:
+        category = 'Underweight'
+    if 16 >= bmi > 15:
+        category = 'Severely underweight'
+    if 15 >= bmi:
+        category = 'Very severely underweight'
+    return '{}'.format(category)
+
+df_dtype['Check BMI'] = df_dtype['BMI'].apply(check_BMI)
+
+
+
+
+
+
+
+
 
 
 
