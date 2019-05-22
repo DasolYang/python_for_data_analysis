@@ -9,3 +9,32 @@ series.plot.pie();
 
 df = pd.DataFrame([[1,3,5,7,9],[2,3,3,6,7]])
 df.plot.bar();
+
+df_dtype = pd.read_excel('fav_food_info_new.xlsx')
+df_dtype.plot();
+df_dtype['Age'].plot();
+df_dtype['Age'].plot.bar();
+df_dtype['Height'].plot.bar();
+
+import matplotlib.pyplot as plt
+axes = df_dtype['Height'].plot.bar()
+axes.set_ylim((150,190))
+plt.show()
+
+df_dtype[['Age','Height']].plot.bar();
+
+plt.scatter(df_dtype['Sex'],df_dtype['Weight']); # using matplotlib
+df_dtype.plot.scatter(x='Sex',y='Weight'); # using pandas. x,y should be numeric
+
+plt.scatter(df_dtype['Height'],df_dtype['Weight']);
+df_dtype.plot.scatter(x='Height',y='Weight');
+
+df_obesity_freq = pd.pivot_table(df_dtype, index='Check BMI', aggfunc='size')
+df_obesity_freq
+#Check BMI
+#Healthy weight    18
+#Overweight         2
+#dtype: int64
+
+df_obesity_freq.plot.bar();
+df_obesity_freq.sort_values().plot.bar();
