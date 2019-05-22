@@ -1,0 +1,11 @@
+import pandas as pd
+
+series = pd.Series([1,2,3,4,5])
+series.plot.bar();
+series.plot.barh();
+series.plot.line();
+series.plot.area();
+series.plot.pie();
+
+df = pd.DataFrame([[1,3,5,7,9],[2,3,3,6,7]])
+df.plot.bar();
