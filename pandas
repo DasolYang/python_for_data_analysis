@@ -1,4 +1,263 @@
 ##################################### pandas ##############################################
+import pandas as pd
+population = pd.Series([51470000, 327200000, 129200000, 37060000], index=['Korea','America','Mexico','Canada'], name = 'Country')
+population
+#Korea       51470000
+#America    327200000
+#Mexico     129200000
+#Canada      37060000
+#Name: Country, dtype: int64
+
+index = ['Korea','America','Mexico','Canada']
+birth_rate = pd.Series([1.17,1.80,2.18,1.60], index = index, name='Birth rate(per woman)')
+unemployment_rate = pd.Series([0.044,0.036,0.034,0.057], index = index, name='Unemployment rate')
+
+df_countries = pd.DataFrame({'Population':population,
+                            'Birth rate':birth_rate,
+                            'Unemployment rate': unemployment_rate})
+df_countries
+
+#             Population	Birth rate	Unemployment rate
+#Korea	       51470000	1.17	       0.044
+#America	327200000	1.80	       0.036
+#Mexico	129200000	2.18	       0.034
+#Canada	37060000	1.60	       0.057
+
+print(df_countries.shape)
+print(df_countries.columns)
+#(4, 3)
+#Index(['Population', 'Birth rate', 'Unemployment rate'], dtype='object')
+
+df_countries_2 = pd.DataFrame([[51470000, 1.17, 0.044],
+                             [327200000, 1.80, 0.036],
+                             [129200000, 2.18, 0.034],
+                             [37060000, 1.60, 0.057]],
+                           index = ['Korea','America','Mexico','Canada'],
+                           columns = ['Population', 'Birth rate','Unemployment rate'])
+df_countries_2
+#             Population	Birth rate	Unemployment rate
+#Korea	       51470000	1.17	       0.044
+#America	327200000	1.80	       0.036
+#Mexico	129200000	2.18	       0.034
+#Canada	37060000	1.60	       0.057
+
+json_data = [
+    {"Name": "Korea","Population": 51470000, "Birth rate": 1.17, "Unemployment rate": 0.044},
+    {"Name": "America","Population": 327200000, "Birth rate": 1.80, "Unemployment rate": 0.036},
+    {"Name": "Mexico","Population": 129200000, "Birth rate": 2.18, "Unemployment rate": 0.034},
+    {"Name": "Canada","Population": 37060000, "Birth rate": 1.60, "Unemployment rate": 0.057}
+]
+df_countries_3 = pd.DataFrame.from_dict(json_data)
+df_countries_3
+#	Birth rate	Name	       Population	Unemployment rate
+#0	1.17	       Korea	       51470000	0.044
+#1	1.80	       America	327200000	0.036
+#2	2.18	       Mexico	       129200000	0.034
+#3	1.60	       Canada	       37060000	0.057
+
+df_countries_3 = df_countries_3.set_index("Name")
+df_countries_3
+#	       Birth rate	Population	Unemployment rate
+#Name			
+#Korea	       1.17	       51470000	0.044
+#America	1.80	       327200000	0.036
+#Mexico	2.18	       129200000	0.034
+#Canada	1.60	       37060000	0.057
+
+df_countries_3.reset_index()
+#	Birth rate	Name	       Population	Unemployment rate
+#0	1.17	       Korea	       51470000	0.044
+#1	1.80	       America	327200000	0.036
+#2	2.18	       Mexico	       129200000	0.034
+#3	1.60	       Canada	       37060000	0.057
+
+df_countries_3.reset_index().reindex([2,1,3,0],columns=['Birth rate','Population','Unemployment rate'])
+# change order of index
+# should have reset_index(). if not, values are NaN
+
+#	Birth rate	Population	Unemployment rate
+#2	2.18	       129200000	0.034
+#1	1.80	       327200000	0.036
+#3	1.60	       37060000	0.057
+#0	1.17	       51470000	0.044
+
+df_countries_3.sort_values('Unemployment rate', ascending = False)
+
+df_countries_3.sort_index(ascending = False)
+
+df_countries_3.rank()
+#	       Birth rate	Population	Unemployment rate
+#Name			
+#Korea	       1.0	       2.0	       3.0
+#America	3.0	       4.0	       2.0
+#Mexico	4.0	       3.0	       1.0
+#Canada	2.0	       1.0	       4.0
+
+df_countries_3.rename(index = {'Korea':'South Korea'},columns={'Birth rate': 'Birth rate(per woman)'})
+#	       Birth rate(per woman)	Population	Unemployment rate
+#Name			
+#South Korea	1.17	                     51470000	0.044
+#America	1.80	                     327200000	0.036
+#Mexico	2.18	                     129200000	0.034
+#Canada	1.60	                     37060000	0.057
+
+df_dtype.head()
+df_dtype.tail()
+df_dtype.sample(n=5) # get n parts of row ramdomly
+
+df_dtype.sample(frac=0.1) # get by ratio
+# ex. 20 rows, fac=0.1 so 10% = 2
+#	Age	Sex	Height	Weight	Favorite Food
+#Number					
+#11	26	2	162	59	1
+#13	35	1	173	68	3
+
+df_dtype[2:5]
+df_dtype[['Favorite Food','Sex']]
+df_dtype > 2 # shows dataframe. True or False values
+
+df_dtype['Sex'] == 1
+
+#1      True
+#2     False
+#3      True
+# ...
+
+df_dtype[df_dtype['Sex']==1] # shows only rows that if Sex == 1
+#	Age	Sex	Height	Weight	Favorite Food
+#Number					
+#1	30	1	183	82	1
+#3	27	1	178	77	2
+# ...
+
+df_dtype.where(df_dtype['Sex']>1)
+#      Age	Sex	Height	Weight	Favorite Food
+#Number					
+#1	NaN	NaN	NaN	NaN	NaN
+#2	28.0	2	160.0	62.0	3
+
+df_dtype.where(df_dtype > 1)
+
+s = pd.Series([70,80,90,100])
+g = {70: "C", 80:"B", 90:"A",100:"A+"}
+s.map(g)
+#0     C
+#1     B
+#2     A
+#3    A+
+
+s = pd.Series([26,13,17,31,7,20])
+s.map(lambda x: round(x, -1))
+#0    30
+#1    10
+#2    20
+#3    30
+#4    10
+#5    20
+
+s.apply(lambda x: round(x, -1))
+# apply and map don't change data. return copy of changed data
+
+df_food = pd.DataFrame([('Korean', 7),('American', 33),('Italian', 15)], index=[1,2,3],columns=['Food type','Numbers of restaurant'])
+new_df = pd.merge(df_dtype, df_food, left_on='Favorite Food', right_index = True)
+new_df.sort_index()
+
+df_food = pd.DataFrame([(1,'Korean', 7),(2,'American', 33),(3,'Italian', 15)],columns=['Favorite Food','Food type','Numbers of restaurant'])
+n_df = pd.merge(df_dtype, df_food, on='Favorite Food')
+n_df
+
+
+df_left = pd.DataFrame([('A','Apple'),('B','Boy'),('D','David'),('F','Father'),('H','Happy'),('J',"Jason")], columns =['Key','LeftWord'])
+df_left
+df_right = pd.DataFrame([('B','Bed'),('C',"Cat"),('D','Dream'),('E','Elephant'),('H','Hair'),('I','Idea')],columns=['Key','RightWord'])
+df_right
+pd.merge(df_left, df_right, on='Key',how='inner')
+#	Key	LeftWord	RightWord
+#0	B	Boy	       Bed
+#1	D	David	       Dream
+#2	H	Happy	       Hair
+
+pd.merge(df_left,df_right,on='Key',how='left')
+#	Key	LeftWord	RightWord
+#0	A	Apple	       NaN
+#1	B	Boy	       Bed
+#2	D	David	       Dream
+#3	F	Father	       NaN
+#4	H	Happy	       Hair
+#5	J	Jason	       NaN
+
+pd.merge(df_left,df_right,on='Key',how='right')
+pd.merge(df_left,df_right,on='Key',how='outer')
+#	Key	LeftWord	RightWord
+#0	A	Apple	       NaN
+#1	B	Boy	       Bed
+#2	D	David	       Dream
+#3	F	Father	       NaN
+#4	H	Happy	       Hair
+#5	J	Jason	       NaN
+#6	C	NaN	       Cat
+#7	E	NaN	       Elephant
+#8	I	NaN	       Idea
+
+######################### pivot table ########################
+
+pd.pivot_table(df_dtype,index=['Sex'])
+#	Age	       Height	       Weight
+#Sex			
+#1	27.714286	174.071429	72.285714
+#2	30.500000	161.333333	61.000000
+pd.pivot_table(df_dtype, columns=['Sex'])
+
+pd.pivot_table(df_dtype, index=['Sex'],values='Weight')
+#	Weight
+#Sex	
+#1	72.285714
+#2	61.000000
+
+pd.pivot_table(df_dtype, columns='Sex', index='Favorite Food', values=['Weight'], aggfunc = np.median)
+# aggfunc(aggregation function) if no assign to aggfunc, default aggfunc is np.mean
+#	       Weight
+#Sex	       1	2
+#Favorite Food		
+#1	       77.0	57.0
+#2	       70.0	60.0
+#3	       70.5	62.0
+
+pd.pivot_table(df_dtype, columns='Sex', index='Favorite Food', values=['Weight'], aggfunc = np.median)
+
+data = pd.DataFrame([('A','T','Y'),('A','F','Y'),('B','T','N'),('B','F','N')],columns=['Alphabet','TorF',"YorN"])
+data
+
+pd.pivot_table(data, index='Alphabet',columns='TorF',values='YorN',aggfunc=lambda x:x)
+# must have aggfunc = lambda x:x
+#TorF	       F	T
+#Alphabet		
+#A	       Y	Y
+#B	       N	N
+
+###### melt ---> oposite of pivot table #####
+
+df_pivot = pd.pivot_table(df_dtype, index='Sex',columns='Favorite Food', values='Weight',aggfunc=np.median)
+df_pivot
+
+#Favorite Food	1	2	3
+#Sex			
+#1	              77.0	70.0	70.5
+#2	              57.0	60.0	62.0
+
+df_pivot.index
+#Int64Index([1, 2], dtype='int64', name='Sex')
+
+df_pivot = df_pivot.reset_index()
+pd.melt(df_pivot, id_vars=["Sex"])
+
+#      Sex	Favorite Food	       value
+#0	1	1	              77.0
+#1	2	1	              57.0
+#2	1	2	              70.0
+#3	2	2	              60.0
+#4	1	3	              70.5
+#5	2	3	              62.0
 
 ###### Series ##################
 
@@ -98,18 +357,18 @@ df
 df2 = pd.DataFrame(data, columns=['year','name','point','penalty'], 
                    index = ['one','two','three','four','five'])
 df2
-#       year	name	    point	penalty
-#one	  2017	Brian	    2.7	  NaN
+#       year	name	       point	  penalty
+#one	  2017	Brian	       2.7	  NaN
 #two	  2016	Christian	3.1	  NaN
-#three	2016	Daniel	  2.1	  NaN
-#four	  2017	Daniel	  2.7	  NaN
-#five	  2018	Daniel	  3.3	  NaN
+#three	2016	Daniel	       2.1	  NaN
+#four	  2017	Daniel	       2.7	  NaN
+#five	  2018	Daniel	       3.3	  NaN
 
 df2.describe()
 #       year	      point
-#count	5.00000	    5.000000
+#count	5.00000	5.000000
 #mean	  2016.80000	2.780000
-#std	  0.83666	    0.460435
+#std	  0.83666	0.460435
 #min	  2016.00000	2.100000
 #25%	  2016.00000	2.700000
 #50%	  2017.00000	2.700000
@@ -120,12 +379,12 @@ df2.describe()
 ############ DataFrame Indexing #############################
 
 df2
-#       year	name	    point	penalty
-# one	  2017	Brian	    2.7	  NaN
-# two	  2016	Christian	3.1	  NaN
-# three	2016	Daniel	  2.1	  NaN
-# four	2017	Daniel	  2.7	  NaN
-# five	2018	Daniel	  3.3	  NaN
+#             year	name	       point	penalty
+# one	       2017	Brian	       2.7	  NaN
+# two	       2016	Christian	3.1	  NaN
+# three	2016	Daniel	       2.1	  NaN
+# four	       2017	Daniel	       2.7	  NaN
+# five	       2018	Daniel	       3.3	  NaN
 
 df2['year']
 #one      2017
@@ -153,40 +412,40 @@ df2[['year','point']]
 
 df2['penalty'] = 0.5
 df2
-#       year	name	    point	penalty
-#one	  2017	Brian	    2.7	  0.5
+#       year	name	       point	penalty
+#one	  2017	Brian	       2.7	  0.5
 #two	  2016	Christian	3.1	  0.5
-#three	2016	Daniel	  2.1	  0.5
-#four	  2017	Daniel	  2.7	  0.5
-#five	  2018	Daniel	  3.3	  0.5
+#three	  2016	Daniel	       2.1	  0.5
+#four	  2017	Daniel	       2.7	  0.5
+#five	  2018	Daniel	       3.3	  0.5
 
 df2['penalty'] = [0.2,0.3,0.2,0.5,0.3]
 df2
-#        year	name	    point	penalty
-#one 	   2017	Brian	    2.7	  0.2
+#        year	       name	    point	penalty
+#one 	   2017	Brian	       2.7	  0.2
 #two	   2016	Christian	3.1	  0.3
-#three	 2016	Daniel	  2.1	  0.2
-#four	   2017	Daniel	  2.7	  0.5
-#five	   2018	Daniel	  3.3	  0.3
+#three	   2016	Daniel	       2.1	  0.2
+#four	   2017	Daniel	       2.7	  0.5
+#five	   2018	Daniel	       3.3	  0.3
 
 df2['number'] = np.arange(1,6)
 df2
-#       year	name	    point	penalty	number
-#one	  2017	Brian	    2.7	  0.2	    1
+#        year	name	       point	penalty       number
+#one	  2017	Brian	       2.7    0.2	    1
 #two	  2016	Christian	3.1 	0.3	    2
-#three	2016	Daniel	  2.1	  0.2	    3
-#four	  2017	Daniel	  2.7 	0.5	    4
-#five 	2018	Daniel	  3.3	  0.3	    5
+#three	  2016	Daniel	       2.1	0.2	    3
+#four	  2017	Daniel	       2.7 	0.5	    4
+#five 	  2018	Daniel	       3.3	0.3	    5
 
 val = pd.Series([-0.3,-0.5,-0.1], index=['two','three','five'])
 df2['debt'] = val
 df2
-#       year	  name	  point	    penalty	number	debt
-#one	  2017	Brian	    2.7	      0.2	    1	      NaN
+#       year	  name	       point	    penalty	number	       debt
+#one	  2017	Brian	       2.7	      0.2	    1	      NaN
 #two	  2016	Christian	3.1	      0.3	    2	      -0.3
-#three	2016	Daniel	  2.1	      0.2	    3	      -0.5
-#four	  2017	Daniel	  2.7	      0.5	    4	      NaN
-#five	  2018	Daniel	  3.3	      0.3	    5	      -0.1
+#three	  2016	Daniel	       2.1	      0.2	    3	      -0.5
+#four	  2017	Daniel	       2.7	      0.5	    4	      NaN
+#five	  2018	Daniel	       3.3	      0.3	    5	      -0.1
 
 df = df2
 df
@@ -257,11 +516,11 @@ df.loc['two']
 #Name: two, dtype: object
 
 df.loc['two':'four']
-#Info	  year	name	    point	penalty	debt
+#Info	  year	name	       point	penalty	  debt
 #Order					
 #two	  2016	Christian	3.1	    0.3	  -0.3
-#three	2016	Daniel	  2.1	    0.2	  -0.5
-#four	  2017	Daniel	  2.7	    0.5 	NaN
+#three	  2016	Daniel	       2.1	    0.2	  -0.5
+#four	  2017	Daniel	       2.7	    0.5 	  NaN
 
 df.loc['two':'four', 'point']
 #Order
@@ -305,14 +564,14 @@ df.loc['three':'five','year':'point']
 
 df.loc['six'] = [2015, 'Shawn', 3.0, 0.2, 0.7]
 df
-#Info	year	name	point	penalty	debt
+#Info	year	name	       point	penalty	debt
 #Order					
-#one	2017	Brian	2.7	0.2	NaN
-#two	2016	Christian	3.1	0.3	-0.3
-#three	2016	Daniel	2.1	0.2	-0.5
-#four	2017	Daniel	2.7	0.5	NaN
-#five	2018	Daniel	3.3	0.3	-0.1
-#six	2015	Shawn	3.0	0.2	0.7
+#one	2017	Brian	       2.7	0.2	       NaN
+#two	2016	Christian	3.1	0.3	       -0.3
+#three	2016	Daniel	       2.1	0.2	       -0.5
+#four	2017	Daniel	       2.7	0.5	       NaN
+#five	2018	Daniel	       3.3	0.3	       -0.1
+#six	2015	Shawn	       3.0	0.2	       0.7
  
 ### df.iloc[index]
 df.iloc[3] ### 4th row
@@ -351,14 +610,14 @@ df.iloc[1,1]
 ##################### boolean indexing from DataFrame
 
 df
-#Info	  year	 name	    point	penalty	debt
+#Info	  year	 name	       point	penalty	debt
 #Order					
-#one	  2017	Brian	    2.7	  0.2	    NaN
+#one	  2017	Brian	       2.7	  0.2	    NaN
 #two	  2016	Christian	3.1	  0.3	    -0.3
-#three	2016	Daniel	  2.1	  0.2	    -0.5
-#four	  2017	Daniel	  2.7	  0.5	    NaN
-#five	  2018	Daniel	  3.3	  0.3	    -0.1
-#six	  2015	Shawn	    3.0	  0.2	    0.7
+#three	  2016	Daniel	       2.1	  0.2	    -0.5
+#four	  2017	Daniel	       2.7	  0.5	    NaN
+#five	  2018	Daniel	       3.3	  0.3	    -0.1
+#six	  2015	Shawn	       3.0	  0.2	    0.7
 
 df['year'] > 2016
 #Order
@@ -371,11 +630,11 @@ df['year'] > 2016
 #Name: year, dtype: bool
 
 df.loc[df['year']>2016, :]
-#Info	year	name	  point	penalty	debt
+#Info	year	name	  point  penalty	debt
 #Order					
 #one	2017	Brian	  2.7	  0.2	    NaN
-#four	2017	Daniel	2.7	  0.5	    NaN
-#five	2018	Daniel	3.3	  0.3	    -0.1
+#four	2017	Daniel	  2.7	  0.5	    NaN
+#five	2018	Daniel	  3.3	  0.3	    -0.1
 
 df.loc[df['name']=='Daniel',['name','point']]
 #Info	  name	point
