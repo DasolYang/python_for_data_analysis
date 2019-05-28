@@ -1,4 +1,85 @@
+%matplotlib inline
+import matplotlib.pyplot as plt
+plt.plot([1,3,2,5,4])
+plt.show();
 
+import numpy as np
+plt.plot(np.arange(10));
+plt.show();
+
+import pandas as pd
+plt.plot(pd.Series([1,3,2,5,4]))
+plt.show();
+
+plt.plot(['2015','2016','2017','2018','2019'],[1,3,2,5,4]) # x values will be first list
+plt.show();
+
+x = ['2015','2016','2017','2018','2019']
+y = [2,1,5,4,3]
+plt.plot(x, [1,3,2,5,4])
+plt.plot(x, y)
+plt.show();
+
+plt.title('Test plot')
+plt.xlabel('Tick')
+plt.ylabel('Value')
+plt.plot([1,3,2,5,4])
+plt.plot([2,1,3,1,2])
+plt.show();
+
+plt.plot(x,[1,3,2,5,4], 'bo') # blue color, o shape mark
+plt.plot(x,[2,1,5,3,5], 'g-.', linewidth=3) 
+plt.plot(x,[5,4,3,4,3], 'm*') 
+plt.plot(x,[3,2,1,2,1], 'c-s', markersize=7)
+plt.grid()
+plt.show();
+# style of mark(dot): '*' star, 's' square, '.' , ',' ,'v' upside down triangle, '^' triangle, '>','<','p', 'D' diamond,...
+# style of line: '-', '--','-.'
+# color: 'b' blue, 'g' green, 'r' red,'c' cyan,'m' magenta,'y' yellow, 'k' black,'w' white
+
+plt.plot(x,[1,3,2,5,4], color='blue',marker='o',linestyle='')
+plt.plot(x,[2,1,5,3,5], color='green', linestyle='-.', linewidth=3) 
+plt.plot(x,[5,4,3,4,3], color = 'magenta', marker='*',linestyle='') 
+plt.plot(x,[3,2,1,2,1], color='cyan',linestyle='-',marker ='s', markersize=7)
+plt.yticks([1,2,3,4,5])
+plt.grid()
+plt.show();
+
+figure = plt.figure()
+axes_1 = figure.add_subplot(2,1,1) # 2 rows 1 column first plot
+axes_1.plot([2,1,3,5,4])
+axex_2 = figure.add_subplot(2,1,2) # 2 rows 1 column second plot
+axex_2.plot([1,3,2,3,4])
+plt.show();
+
+figure = plt.figure()
+axes_1 = figure.add_subplot(1,2,1) # 1 rows 2 column first plot
+axes_1.plot([2,1,3,5,4])
+
+axes_2 = figure.add_subplot(1,2,2) # 1 rows 2 column second plot
+axes_2.plot([1,3,2,3,4])
+plt.show();
+
+
+df = pd.DataFrame([(1,300),(2,400),(3,410),(4,150)],columns=['A','B'])
+axes = df.plot.line()
+axes.grid()
+
+df = pd.DataFrame([(1,300),(2,400),(3,410),(4,150)],columns=['A','B'])
+df.plot.line()
+plt.grid()
+
+df_dtype = pd.read_excel('fav_food_info_new.xlsx', sheet_name = 'Sheet1',index_col=0,
+                        dtype={'Number':'object','Sex':'object','Favorite Food': 'object',
+                              'BMI':'object','Age Group':'object','Check BMI':'object'})
+import seaborn as sns
+sns.regplot(x='Height',y='Weight',data=df_dtype);
+
+sns.stripplot(x='Sex',y='Weight',data=df_dtype);
+
+
+
+######################################
 
 import matplotlib
 import matplotlib.pyplot as plt
