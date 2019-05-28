@@ -1,5 +1,91 @@
 import numpy as np
 
+an_array = np.array([1,2,3])
+print(an_array)
+
+a_matrix = np.array([[1,2,3],[4,5,6]])
+print(a_matrix)
+#[[1 2 3]
+# [4 5 6]]
+an_array = np.zeros(3)
+print(an_array)
+#[0. 0. 0.]
+a_matrix = np.ones((2,3))
+print(a_matrix)
+#[[1. 1. 1.]
+# [1. 1. 1.]]
+
+array1 = np.arange(10)
+print(array1)
+
+matrix1 = np.arange(12).reshape((3,4))
+print(matrix1)
+#[[ 0  1  2  3]
+# [ 4  5  6  7]
+# [ 8  9 10 11]]
+
+print(matrix1[1]) # [4 5 6 7]
+print(matrix1[1][2]) # 6
+print(matrix1[1,2]) # 6
+print(matrix1[:2]) 
+# [[0 1 2 3]
+# [4 5 6 7]]
+print(matrix1[1:3,1]) # [5 9]
+print(matrix1[:,1]) # [1 5 9]
+
+matrix1 = np.arange(12).reshape((3,4)).T
+print(matrix1)
+#[[ 0  4  8]
+# [ 1  5  9]
+# [ 2  6 10]
+# [ 3  7 11]]
+
+array2 = np.random.random(3)
+print(array2)
+
+an_array = np.arange(5) * 2
+print(an_array)
+# [0 2 4 6 8]
+
+a_matrix = np.arange(8).reshape(2,4) *3
+print(a_matrix)
+#[[ 0  3  6  9]
+# [12 15 18 21]]
+
+matrix1 = np.arange(8).reshape((2,4)) % 2 == 0
+print(matrix1)
+#[[ True False  True False]
+# [ True False  True False]]
+
+matrix2 = np.arange(8).reshape(2,4)
+print(matrix2)
+#[[0 1 2 3]
+# [4 5 6 7]]
+print(np.sum(matrix2)) # 28
+
+print(np.sum(matrix2, axis=0))
+# [ 4  6  8 10]
+print(np.sum(matrix2, axis=1))
+# [ 6 22]
+
+print(np.cumsum(matrix2))
+# [ 0  1  3  6 10 15 21 28]
+
+print(np.cumsum(matrix2, axis = 0))
+#[[ 0  1  2  3]
+# [ 4  6  8 10]]
+
+print(np.cumsum(matrix2, axis = 1))
+#[[ 0  1  3  6]
+# [ 4  9 15 22]]
+
+print(np.random.rand(3))
+# [0.48421279 0.29528639 0.11549802]
+
+#############################################################
+
+import numpy as np
+
 ########################### array ################################
 
 num_data1 = [1,2,3,4,5]
