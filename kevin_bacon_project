@@ -1,0 +1,21 @@
+import bs4
+from bs4 import BeautifulSoup as soup
+from urllib.request import urlopen as uReq
+
+my_url = 'https://www.imdb.com/search/name?gender=male,female&ref_=nv_cel_m'
+
+response = uReq(my_url)
+page = response.read()
+#print(page)
+
+response.close()
+
+# HTML parsing
+p_soup = soup(page, "html.parser")
+#print(p_soup.findAll("h3",{"class":"lister-item-header"}))
+
+containers = p_soup.findAll("h3",{"class":"lister-item-header"})
+print(len(containers))
+container = containers[0]
+for container in containers:
+    print(container.a.text.strip())
