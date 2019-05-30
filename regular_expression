@@ -1,0 +1,37 @@
+import re
+
+pattern = re.compile(r'(.+)\s\|\s(.+)\sby\s(.+)\s\|\s(.+)$')
+
+lines = ["A name of title(any) | blog's name by Gary |  05/29/2019 20:52",
+         "Second example | testing by John | May 29, 2019"]
+
+for line in lines:
+    matches = pattern.match(line) # 패턴과 매치하는지 점검
+    if not matches:             # 매치하지 않는다면 건너뛴다
+        continue
+
+    print('Title:', matches.group(1))
+    print('Blog:', matches.group(2))
+    print('Writer:', matches.group(3))
+    print('Date:', matches.group(4))
+    print()
+    
+
+pattern = re.compile(r'(.+)\s\((.+)\)\.\s(.+)$')
+
+lines = ["Beare, B. (2017). The Chang-Kim-Park model of cointegrated density-valued time series cannot accommodate a stochastic trend. Econ Journal Watch 14, 133137.",
+"Beare, B., J. Seo, and W. Seo (2017). Cointegrated Linear Processes in Hilbert Space. Journal of Time Series Analysis 38, 10101027.",
+"Chang, Y., C. Kim, and J. Park (2016). Nonstationarity in time series of state densities. Journal of Econometrics 192, 152  167."]
+
+
+
+for line in lines:
+    matches = pattern.match(line) # 패턴과 매치하는지 점검
+    if not matches:             # 매치하지 않는다면 건너뛴다
+        continue
+
+    print('Writer:', matches.group(1))
+    print('Year:', matches.group(2))
+    print('Name of the article:', matches.group(3))
+    print()
+    
