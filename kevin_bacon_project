@@ -1,21 +1,45 @@
 import bs4
 from bs4 import BeautifulSoup as soup
-from urllib.request import urlopen as uReq
+from urllib.request import urlopen
 
-my_url = 'https://www.imdb.com/search/name?gender=male,female&ref_=nv_cel_m'
+def extract_name_code(url):
+    code = url[url.find('nm')+len('nm'):]
+    return code
 
-response = uReq(my_url)
-page = response.read()
-#print(page)
+def fetch_actors_list(url):
+    response = urlopen(url)
+    page = response.read()
+    response.close()
+    # HTML parsing
+    p_soup = soup(page, "html.parser")
+    #print(p_soup.findAll("h3",{"class":"lister-item-header"}))
+    
+    # find all
+    containers = p_soup.findAll("h3",{"class":"lister-item-header"})
+    
+    container = containers[0] # assign only first information of actor
+    
+    actor_lists = []
+    for container in containers:
+        name = container.a.text.strip()
+        code_url = container.a['href']
+        code = extract_name_code(code_url)
+        
+        actor_list = {'Name:':name, 'Code:':code}
+        actor_lists.append(actor_list)
 
-response.close()
+    return actor_lists
+    
 
-# HTML parsing
-p_soup = soup(page, "html.parser")
-#print(p_soup.findAll("h3",{"class":"lister-item-header"}))
 
-containers = p_soup.findAll("h3",{"class":"lister-item-header"})
-print(len(containers))
-container = containers[0]
-for container in containers:
-    print(container.a.text.strip())
+def fetch_actors_pages():
+    base_url = 'https://www.imdb.com/search/name?gender=male,female&start={}&ref_=rlm'
+    for page_number in range(1,100,50):
+        actor_list = fetch_actors_list(base_url.format(page_number))
+        
+        for actor in actor_list:
+            print(actor)
+    return
+print(fetch_actors_pages())
+
+
